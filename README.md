@@ -208,19 +208,7 @@ Hasil terbaik Faster R-CNN ResNet-50 RGB diperoleh pada epoch 19.
 | ----: | -----------: | -------: | ------: | -----------: | --------: | -----: |
 |    19 |       0.0343 |   0.8148 |  0.9906 |       0.8602 |    0.8839 | 0.9124 |
 
-## Link Google Drive
-
-File besar seperti dataset, model hasil training, artikel `.docx/.pdf`, hasil pengujian lengkap, dan video presentasi disimpan pada Google Drive.
-
-Link Google Drive tersedia pada file:
-
-```text
-google_drive_link.txt
 ```
-
-## Catatan
-
-Repository ini digunakan sebagai dokumentasi dan source code pendukung tugas replikasi jurnal Artificial Intelligence. File besar tidak disimpan langsung di GitHub agar repository tetap ringan dan mudah diakses.
 
 ## Author
 
