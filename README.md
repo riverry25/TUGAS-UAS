@@ -1,21 +1,21 @@
-# Deteksi Nominal Uang Kertas Rupiah Menggunakan YOLOv5 dan Faster R-CNN ResNet-50
+# Replikasi Jurnal AI: Deteksi Nominal Uang Kertas Rupiah Menggunakan YOLOv5 dan Faster R-CNN ResNet-50
 
-Repository ini berisi dokumentasi dan kode eksperimen untuk proyek replikasi jurnal Artificial Intelligence pada bidang computer vision dan object detection.
+Repository ini berisi dokumentasi, source code, dan ringkasan eksperimen untuk tugas replikasi jurnal Artificial Intelligence pada bidang computer vision dan object detection.
 
-Topik utama proyek ini adalah deteksi nominal uang kertas rupiah menggunakan dua algoritma object detection, yaitu YOLOv5 dan Faster R-CNN ResNet-50.
+Topik proyek ini adalah deteksi nominal uang kertas rupiah menggunakan dua model object detection, yaitu YOLOv5 dan Faster R-CNN ResNet-50.
 
 ## Artikel Acuan
 
-Artikel utama yang digunakan sebagai acuan replikasi adalah:
+Artikel utama yang digunakan sebagai acuan replikasi:
 
 **Rupiah Banknotes Detection: Comparison of The Faster R-CNN Algorithm and YOLOv5**
 Jurnal INFOTEL, Vol. 16 No. 3, 2024.
 
-Artikel tersebut membandingkan performa YOLOv5 dan Faster R-CNN ResNet-50 untuk mendeteksi nominal uang kertas rupiah menggunakan dataset 1120 gambar dari 8 kelas. Eksperimen dilakukan menggunakan dua skema preprocessing, yaitu RGB dan HSV with HOG.
+Artikel tersebut membandingkan performa YOLOv5 dan Faster R-CNN ResNet-50 dalam mendeteksi nominal uang kertas rupiah menggunakan dua skema preprocessing, yaitu RGB dan HSV with HOG.
 
 ## Tujuan Proyek
 
-Tujuan proyek ini adalah mereplikasi alur eksperimen dari artikel utama, mulai dari pemahaman metode, persiapan dataset, training model, evaluasi hasil, hingga perbandingan hasil replikasi dengan artikel utama.
+Tujuan proyek ini adalah mereplikasi alur eksperimen dari artikel utama, mulai dari persiapan dataset, preprocessing, training model, evaluasi hasil, hingga perbandingan performa model.
 
 Replikasi ini tidak menyalin isi artikel, tetapi mengikuti metode eksperimen dan alur penelitian yang digunakan.
 
@@ -23,77 +23,90 @@ Replikasi ini tidak menyalin isi artikel, tetapi mengikuti metode eksperimen dan
 
 Model yang digunakan dalam proyek ini adalah:
 
-1. YOLOv5
-   Digunakan karena memiliki performa cepat dan cocok untuk real-time object detection.
+1. **YOLOv5s**
+   Digunakan karena ringan, cepat, dan cocok untuk real-time object detection.
 
-2. Faster R-CNN ResNet-50
+2. **Faster R-CNN ResNet-50**
    Digunakan sebagai model pembanding karena termasuk metode two-stage object detection yang kuat untuk deteksi objek.
 
 ## Skema Eksperimen
 
-Eksperimen dirancang dalam empat skenario:
+Eksperimen dirancang menjadi empat skenario:
 
 | No | Model                  | Skema     |
 | -- | ---------------------- | --------- |
-| 1  | YOLOv5                 | RGB       |
-| 2  | YOLOv5                 | HSV + HOG |
+| 1  | YOLOv5s                | RGB       |
+| 2  | YOLOv5s                | HSV + HOG |
 | 3  | Faster R-CNN ResNet-50 | RGB       |
 | 4  | Faster R-CNN ResNet-50 | HSV + HOG |
 
+## Struktur Repository
+
+```text
+TUGAS-UAS/
+├── README.md
+├── src/
+│   ├── preprocessing_hsv_hog.py
+│   ├── train_faster_rcnn.py
+│   ├── evaluate_faster_rcnn.py
+│   └── visualize_prediction.py
+├── results/
+│   └── README.md
+├── dataset/
+│   └── README.md
+├── requirements.txt
+└── google_drive_link.txt
+```
+
+## Penjelasan Folder
+
+| Folder/File             | Keterangan                                                                          |
+| ----------------------- | ----------------------------------------------------------------------------------- |
+| `README.md`             | Dokumentasi utama proyek                                                            |
+| `src/`                  | Source code utama yang digunakan dalam eksperimen                                   |
+| `dataset/README.md`     | Penjelasan dataset dan link dataset                                                 |
+| `results/README.md`     | Penjelasan hasil pengujian dan link hasil lengkap                                   |
+| `requirements.txt`      | Library Python yang digunakan                                                       |
+| `google_drive_link.txt` | Link Google Drive yang berisi file besar seperti dataset, model, artikel, dan video |
+
 ## Dataset
 
-Dataset yang digunakan adalah dataset uang kertas rupiah dari Roboflow. Dataset digunakan dalam dua format:
+Dataset yang digunakan adalah dataset uang kertas rupiah dari Roboflow.
+
+Dataset digunakan dalam dua format:
 
 | Model        | Format Dataset |
 | ------------ | -------------- |
 | YOLOv5       | YOLOv5 PyTorch |
 | Faster R-CNN | Pascal VOC     |
 
-Untuk skema HSV + HOG, dataset dibuat dari gambar RGB asli dengan proses preprocessing:
+Untuk skema HSV + HOG, dataset baru dibuat dari dataset RGB dengan proses:
 
 1. Membaca gambar RGB.
 2. Mengubah gambar ke format HSV.
-3. Mengambil fitur HOG dari channel Value.
-4. Menggabungkan Hue, Saturation, dan HOG.
-5. Menyimpan hasil preprocessing sebagai dataset baru.
+3. Mengambil channel Hue, Saturation, dan Value.
+4. Mengekstraksi fitur HOG dari channel Value.
+5. Menggabungkan Hue, Saturation, dan HOG menjadi gambar 3 channel.
+6. Menyalin label asli karena posisi bounding box tidak berubah.
 
-Label bounding box tetap sama karena posisi objek uang tidak berubah.
+## Source Code
 
-## Struktur Dataset YOLOv5
+Source code utama tersedia pada folder `src/`.
 
-```text
-dataset/
-├── train/images
-├── train/labels
-├── valid/images
-├── valid/labels
-├── test/images
-├── test/labels
-└── data.yaml
-```
+| File                       | Fungsi                                                                       |
+| -------------------------- | ---------------------------------------------------------------------------- |
+| `preprocessing_hsv_hog.py` | Mengubah dataset RGB menjadi dataset HSV + HOG                               |
+| `train_faster_rcnn.py`     | Training Faster R-CNN ResNet-50 menggunakan dataset Pascal VOC               |
+| `evaluate_faster_rcnn.py`  | Evaluasi model Faster R-CNN menggunakan mAP, precision, recall, dan F1-score |
+| `visualize_prediction.py`  | Membuat visualisasi hasil prediksi bounding box                              |
 
-## Struktur Dataset Faster R-CNN
+## Langkah Eksperimen Singkat
 
-```text
-dataset/
-├── images/
-└── annotations/
-```
+### 1. Training YOLOv5 RGB
 
-Dataset Faster R-CNN menggunakan format anotasi Pascal VOC dengan file `.xml`.
+Training YOLOv5 RGB dilakukan menggunakan repository resmi YOLOv5.
 
-## Hasil Eksperimen Sementara
-
-| Model                  | Scheme    | Precision | Recall |  mAP50 | mAP50-95 | Status   |
-| ---------------------- | --------- | --------: | -----: | -----: | -------: | -------- |
-| YOLOv5s                | RGB       |     0.968 |  0.974 |  0.978 |    0.893 | Selesai  |
-| YOLOv5s                | HSV + HOG |         - |      - |      - |        - | Training |
-| Faster R-CNN ResNet-50 | RGB       |    0.8839 | 0.9124 | 0.9906 |   0.8602 | Selesai  |
-| Faster R-CNN ResNet-50 | HSV + HOG |         - |      - |      - |        - | Belum    |
-
-## Hasil YOLOv5 RGB
-
-Training YOLOv5 RGB dilakukan dengan command:
+Command training:
 
 ```bash
 python train.py \
@@ -105,27 +118,17 @@ python train.py \
 --name rupiah_yolov5_rgb
 ```
 
-Hasil evaluasi YOLOv5 RGB:
+### 2. Preprocessing Dataset HSV + HOG
 
-| Model   | Scheme | Images | Instances | Precision | Recall | mAP50 | mAP50-95 |
-| ------- | ------ | -----: | --------: | --------: | -----: | ----: | -------: |
-| YOLOv5s | RGB    |    432 |       434 |     0.968 |  0.974 | 0.978 |    0.893 |
+Dataset HSV + HOG dibuat dari dataset RGB menggunakan file:
 
-## Hasil Faster R-CNN RGB
-
-Training Faster R-CNN ResNet-50 RGB telah selesai. Model terbaik diperoleh pada epoch 19 berdasarkan nilai mAP 0.5:0.95 tertinggi.
-
-| Epoch | Train Losses | Accuracy | mAP 0.5 | mAP 0.5:0.95 | Precision | Recall |
-| ----: | -----------: | -------: | ------: | -----------: | --------: | -----: |
-|    19 |       0.0343 |   0.8148 |  0.9906 |       0.8602 |    0.8839 | 0.9124 |
-
-File model terbaik:
-
-```text
-faster_rcnn_best.pth
+```bash
+python src/preprocessing_hsv_hog.py \
+--source /content/dataset \
+--output /content/dataset_hsv_hog
 ```
 
-## Training YOLOv5 HSV + HOG
+### 3. Training YOLOv5 HSV + HOG
 
 Training YOLOv5 HSV + HOG dilakukan dengan command:
 
@@ -139,45 +142,85 @@ python train.py \
 --name rupiah_yolov5_hsv_hog
 ```
 
-Jika training berhenti karena runtime Google Colab habis, training dapat dilanjutkan menggunakan checkpoint `last.pt`:
+Jika training terhenti karena runtime Google Colab habis, training dapat dilanjutkan menggunakan checkpoint `last.pt`:
 
 ```bash
 python train.py --resume /content/yolov5/runs/train/rupiah_yolov5_hsv_hog/weights/last.pt
 ```
 
-## Evaluasi
+### 4. Training Faster R-CNN RGB
 
-Metrik evaluasi yang digunakan dalam proyek ini adalah:
+Training Faster R-CNN ResNet-50 dilakukan menggunakan source code:
 
-* Precision
-* Recall
-* mAP50
-* mAP50-95
-* Accuracy
-* Train Losses
-* Visualisasi bounding box prediksi
+```bash
+python src/train_faster_rcnn.py \
+--data /content/rupiah_voc \
+--epochs 40 \
+--batch-size 8 \
+--output /content/faster_rcnn_rgb
+```
 
-## Status Proyek
+### 5. Evaluasi Faster R-CNN
 
-| Tahap                              | Status          |
-| ---------------------------------- | --------------- |
-| Pemilihan artikel utama            | Selesai         |
-| Pemahaman metode                   | Selesai         |
-| Persiapan dataset YOLOv5 RGB       | Selesai         |
-| Training YOLOv5 RGB                | Selesai         |
-| Evaluasi YOLOv5 RGB                | Selesai         |
-| Persiapan dataset Faster R-CNN RGB | Selesai         |
-| Training Faster R-CNN RGB          | Selesai         |
-| Evaluasi Faster R-CNN RGB          | Selesai         |
-| Dataset YOLOv5 HSV + HOG           | Selesai         |
-| Training YOLOv5 HSV + HOG          | Sedang berjalan |
-| Evaluasi YOLOv5 HSV + HOG          | Belum           |
-| Training Faster R-CNN HSV + HOG    | Belum           |
-| Draft artikel replikasi            | Belum final     |
+Evaluasi Faster R-CNN dilakukan menggunakan source code:
+
+```bash
+python src/evaluate_faster_rcnn.py \
+--data /content/rupiah_voc \
+--weights /content/faster_rcnn_rgb/faster_rcnn_best.pth \
+--output /content/faster_rcnn_rgb/evaluation
+```
+
+### 6. Visualisasi Prediksi Faster R-CNN
+
+Visualisasi prediksi bounding box dilakukan menggunakan source code:
+
+```bash
+python src/visualize_prediction.py \
+--data /content/rupiah_voc \
+--weights /content/faster_rcnn_rgb/faster_rcnn_best.pth \
+--output /content/faster_rcnn_rgb/predictions \
+--threshold 0.5
+```
+
+## Hasil Pengujian Sementara
+
+| Model                  | Scheme    | Precision | Recall |  mAP50 | mAP50-95 | Status   |
+| ---------------------- | --------- | --------: | -----: | -----: | -------: | -------- |
+| YOLOv5s                | RGB       |     0.968 |  0.974 |  0.978 |    0.893 | Selesai  |
+| YOLOv5s                | HSV + HOG |         - |      - |      - |        - | Training |
+| Faster R-CNN ResNet-50 | RGB       |    0.8839 | 0.9124 | 0.9906 |   0.8602 | Selesai  |
+| Faster R-CNN ResNet-50 | HSV + HOG |         - |      - |      - |        - | Belum    |
+
+## Hasil YOLOv5 RGB
+
+Hasil evaluasi YOLOv5 RGB:
+
+| Model   | Scheme | Images | Instances | Precision | Recall | mAP50 | mAP50-95 |
+| ------- | ------ | -----: | --------: | --------: | -----: | ----: | -------: |
+| YOLOv5s | RGB    |    432 |       434 |     0.968 |  0.974 | 0.978 |    0.893 |
+
+## Hasil Faster R-CNN RGB
+
+Hasil terbaik Faster R-CNN ResNet-50 RGB diperoleh pada epoch 19.
+
+| Epoch | Train Losses | Accuracy | mAP 0.5 | mAP 0.5:0.95 | Precision | Recall |
+| ----: | -----------: | -------: | ------: | -----------: | --------: | -----: |
+|    19 |       0.0343 |   0.8148 |  0.9906 |       0.8602 |    0.8839 | 0.9124 |
+
+## Link Google Drive
+
+File besar seperti dataset, model hasil training, artikel `.docx/.pdf`, hasil pengujian lengkap, dan video presentasi disimpan pada Google Drive.
+
+Link Google Drive tersedia pada file:
+
+```text
+google_drive_link.txt
+```
 
 ## Catatan
 
-Repository ini dibuat untuk dokumentasi tugas replikasi jurnal Artificial Intelligence. Hasil eksperimen dapat berbeda dari artikel utama karena perbedaan dataset, jumlah kelas, kualitas anotasi, pembagian data, preprocessing, konfigurasi training, dan perangkat komputasi yang digunakan.
+Repository ini digunakan sebagai dokumentasi dan source code pendukung tugas replikasi jurnal Artificial Intelligence. File besar tidak disimpan langsung di GitHub agar repository tetap ringan dan mudah diakses.
 
 ## Author
 
