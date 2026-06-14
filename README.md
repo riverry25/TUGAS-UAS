@@ -275,7 +275,7 @@ File besar yang disimpan di Google Drive meliputi:
 Link Google Drive:
 
 ```text
-[Masukkan link Google Drive di sini]
+https://drive.google.com/drive/folders/1kVgIqUf6ni5Fx4sSeqdwWsguDW8IXLcu?usp=sharing
 ```
 
 ---
